@@ -1,0 +1,87 @@
+{
+  "colors": {
+    "background": {
+      "page": "#050505",
+      "surface": "#0F0F11",
+      "surface_hover": "#18181B",
+      "overlay": "rgba(5, 5, 5, 0.8)"
+    },
+    "primary": {
+      "cyan": "#00F0FF",
+      "cyan_hover": "#4DFAFF",
+      "cyan_dim": "rgba(0, 240, 255, 0.1)"
+    },
+    "secondary": {
+      "purple": "#7B61FF",
+      "purple_hover": "#927CFF"
+    },
+    "brand": {
+      "monero_orange": "#F26822"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A1AA",
+      "tertiary": "#52525B",
+      "disabled": "#3F3F46"
+    },
+    "status": {
+      "success": "#10B981",
+      "warning": "#F59E0B",
+      "error": "#EF4444"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": ["Inter", "system-ui", "sans-serif"],
+      "display": ["Space Grotesk", "sans-serif"],
+      "mono": ["JetBrains Mono", "monospace"]
+    },
+    "fontSize": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem"
+    },
+    "fontWeight": {
+      "regular": "400",
+      "medium": "500",
+      "bold": "700"
+    }
+  },
+  "spacing": {
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "6": "24px",
+    "8": "32px",
+    "12": "48px",
+    "16": "64px",
+    "24": "96px"
+  },
+  "borderRadius": {
+    "sm": "4px",
+    "md": "8px",
+    "lg": "12px",
+    "full": "9999px"
+  },
+  "shadows": {
+    "glow_cyan": "0 0 15px rgba(0, 240, 255, 0.3)",
+    "glow_purple": "0 0 15px rgba(123, 97, 255, 0.3)",
+    "card": "0 4px 6px -1px rgba(0, 0, 0, 0.5)"
+  },
+  "animation": {
+    "duration": {
+      "fast": "150ms",
+      "normal": "300ms",
+      "slow": "500ms"
+    },
+    "easing": {
+      "default": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  }
+}
