@@ -9,93 +9,92 @@ export function PrivacyPage() {
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">Our Commitment</h2>
             <p className="text-text-secondary">
-              MoneroDrip dibangun dengan prinsip privasi mutlak. Kami percaya bahwa privasi finansial 
-              adalah hak fundamental, bukan privilese. Kebijakan ini menjelaskan bagaimana kami 
-              menghormati dan melindungi privasi Anda.
+              MoneroDrip is built with absolute privacy principles. We believe that financial privacy 
+              is a fundamental right, not a privilege. This policy explains how we respect and protect your privacy.
             </p>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-bold mb-4">Data yang Kami TIDAK Kumpulkan</h2>
+            <h2 className="font-display text-2xl font-bold mb-4">Data We DO NOT Collect</h2>
             <ul className="space-y-2 text-text-secondary">
               <li className="flex items-start gap-2">
                 <span className="text-status-success">-</span>
-                <span>Tidak ada cookies pelacakan</span>
+                <span>No tracking cookies</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-status-success">-</span>
-                <span>Tidak ada analytics (Google Analytics, Mixpanel, dll)</span>
+                <span>No analytics (Google Analytics, Mixpanel, etc)</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-status-success">-</span>
-                <span>Tidak ada tracking pixels</span>
+                <span>No tracking pixels</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-status-success">-</span>
-                <span>Tidak ada fingerprinting browser</span>
+                <span>No browser fingerprinting</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-status-success">-</span>
-                <span>Tidak ada penyimpanan IP address</span>
+                <span>No IP address storage</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-status-success">-</span>
-                <span>Tidak ada akun pengguna atau email</span>
+                <span>No user accounts or emails</span>
               </li>
             </ul>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-bold mb-4">Data Minimal yang Diproses</h2>
+            <h2 className="font-display text-2xl font-bold mb-4">Minimal Data Processed</h2>
             <p className="text-text-secondary mb-4">
-              Untuk menjalankan layanan DCA, kami memproses data berikut secara temporer:
+              To run the DCA service, we process the following data temporarily:
             </p>
             <ul className="space-y-2 text-text-secondary">
               <li className="flex items-start gap-2">
                 <span className="text-primary">1.</span>
-                <span><strong>Alamat Wallet Ethereum:</strong> Diperlukan untuk mengeksekusi transaksi. Tidak dikaitkan dengan identitas.</span>
+                <span><strong>Ethereum Wallet Address:</strong> Required for transaction execution. Not linked to identity.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary">2.</span>
-                <span><strong>Alamat XMR Tujuan:</strong> Di-hash dan disimpan sementara untuk routing pembayaran.</span>
+                <span><strong>XMR Destination Address:</strong> Hashed and stored temporarily for payment routing.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary">3.</span>
-                <span><strong>Parameter Strategi:</strong> Jumlah, interval, dan jumlah order yang diinginkan.</span>
+                <span><strong>Strategy Parameters:</strong> Amount, interval, and desired order count.</span>
               </li>
             </ul>
           </section>
 
           <section>
-            <h2 className="font-display text-2xl font-bold mb-4">Penghapusan Otomatis</h2>
+            <h2 className="font-display text-2xl font-bold mb-4">Automatic Deletion</h2>
             <p className="text-text-secondary">
-              Semua data strategi DCA dihapus secara otomatis dalam 30 hari setelah strategi selesai 
-              atau dibatalkan. Anda juga dapat meminta penghapusan segera melalui Dashboard.
+              All DCA strategy data is automatically deleted within 30 days after the strategy completes 
+              or is cancelled. You can also request immediate deletion through the Dashboard.
             </p>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">On-Chain Data</h2>
             <p className="text-text-secondary">
-              Transaksi di blockchain Ethereum bersifat publik dan permanen. Namun, begitu swap 
-              dikonversi ke Monero, transaksi menjadi sepenuhnya tidak dapat dilacak berkat 
-              teknologi privasi bawaan Monero.
+              Transactions on the Ethereum blockchain are public and permanent. However, once swapped 
+              to Monero, transactions become completely untraceable thanks to Monero's built-in 
+              privacy technology.
             </p>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">Third Parties</h2>
             <p className="text-text-secondary">
-              Kami tidak membagikan data apa pun dengan pihak ketiga. Tidak ada mitra iklan, 
-              tidak ada data broker, tidak ada penjualan data.
+              We do not share any data with third parties. No advertising partners, 
+              no data brokers, no data sales.
             </p>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">Contact</h2>
             <p className="text-text-secondary">
-              Pertanyaan tentang privasi? Hubungi kami via encrypted channels yang tercantum 
-              di halaman dokumentasi.
+              Questions about privacy? Contact us via encrypted channels listed 
+              on the documentation page.
             </p>
           </section>
         </div>

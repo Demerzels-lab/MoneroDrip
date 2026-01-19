@@ -16,17 +16,17 @@ const content: Record<string, { title: string; content: JSX.Element }[]> = {
       content: (
         <div className="space-y-4">
           <p>
-            MoneroDrip adalah platform DCA (Dollar Cost Averaging) otomatis yang memungkinkan Anda 
-            mengakumulasi Monero (XMR) secara berkala tanpa perlu intervensi manual.
+            MoneroDrip is an automated DCA (Dollar Cost Averaging) platform that allows you 
+            to accumulate Monero (XMR) periodically without manual intervention.
           </p>
           <p>
-            Platform ini dirancang dengan prinsip privasi mutlak - tidak ada akun, tidak ada cookies, 
-            dan tidak ada analytics yang melacak aktivitas Anda.
+            This platform is designed with absolute privacy principles - no accounts, no cookies, 
+            and no analytics tracking your activity.
           </p>
           <div className="p-4 bg-status-warning/10 border border-status-warning/30 rounded-lg">
             <p className="text-status-warning font-medium">Warning</p>
             <p className="text-sm text-text-secondary mt-1">
-              Pastikan Anda memahami risiko yang terlibat dalam cryptocurrency trading sebelum menggunakan platform ini.
+              Make sure you understand the risks involved in cryptocurrency trading before using this platform.
             </p>
           </div>
         </div>
@@ -37,12 +37,12 @@ const content: Record<string, { title: string; content: JSX.Element }[]> = {
       content: (
         <div className="space-y-4">
           <ol className="list-decimal list-inside space-y-3">
-            <li>Connect wallet Ethereum Anda (MetaMask, Rabby, dll)</li>
-            <li>Pilih token sumber (USDC, WETH, WBTC, atau DAI)</li>
-            <li>Tentukan jumlah dan interval DCA</li>
-            <li>Masukkan alamat XMR tujuan Anda</li>
-            <li>Approve token allowance untuk smart contract</li>
-            <li>Sistem akan otomatis menjalankan swap sesuai jadwal</li>
+            <li>Connect your Ethereum wallet (MetaMask, Phantom, etc)</li>
+            <li>Select source token (USDC, WETH, WBTC, or DAI)</li>
+            <li>Set DCA amount and interval</li>
+            <li>Enter your destination XMR address</li>
+            <li>Approve token allowance for smart contract</li>
+            <li>System will automatically execute swaps on schedule</li>
           </ol>
           <pre className="bg-zinc-900 p-4 rounded-lg overflow-x-auto text-sm font-mono">
 {`// Example: Creating a DCA strategy
@@ -61,7 +61,7 @@ const strategy = {
       title: 'Supported Assets',
       content: (
         <div className="space-y-4">
-          <p>Saat ini MoneroDrip mendukung token berikut sebagai sumber DCA:</p>
+          <p>MoneroDrip currently supports the following tokens as DCA sources:</p>
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/10">
@@ -88,8 +88,8 @@ const strategy = {
       content: (
         <div className="space-y-4">
           <p>
-            MoneroDrip menyediakan REST API untuk integrasi programatik. 
-            Semua endpoint menggunakan autentikasi berbasis wallet signature.
+            MoneroDrip provides a REST API for programmatic integration. 
+            All endpoints use wallet signature-based authentication.
           </p>
           <pre className="bg-zinc-900 p-4 rounded-lg overflow-x-auto text-sm font-mono">
 {`Base URL: https://api.monerodrip.xyz/v1
@@ -111,14 +111,14 @@ Headers:
               <span className="px-2 py-1 bg-status-success/20 text-status-success text-xs rounded">GET</span>
               <code className="text-sm">/strategies</code>
             </div>
-            <p className="text-text-secondary text-sm">Mendapatkan semua strategi DCA untuk wallet terhubung.</p>
+            <p className="text-text-secondary text-sm">Get all DCA strategies for connected wallet.</p>
           </div>
           <div className="p-4 bg-zinc-900 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <span className="px-2 py-1 bg-primary/20 text-primary text-xs rounded">POST</span>
               <code className="text-sm">/strategies</code>
             </div>
-            <p className="text-text-secondary text-sm">Membuat strategi DCA baru.</p>
+            <p className="text-text-secondary text-sm">Create a new DCA strategy.</p>
             <pre className="mt-2 text-xs font-mono text-text-tertiary">
 {`{
   "source_asset": "USDC",
@@ -135,14 +135,14 @@ Headers:
               <span className="px-2 py-1 bg-status-warning/20 text-status-warning text-xs rounded">PATCH</span>
               <code className="text-sm">/strategies/:id</code>
             </div>
-            <p className="text-text-secondary text-sm">Update status strategi (pause/resume).</p>
+            <p className="text-text-secondary text-sm">Update strategy status (pause/resume).</p>
           </div>
           <div className="p-4 bg-zinc-900 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <span className="px-2 py-1 bg-status-error/20 text-status-error text-xs rounded">DELETE</span>
               <code className="text-sm">/strategies/:id</code>
             </div>
-            <p className="text-text-secondary text-sm">Membatalkan strategi DCA.</p>
+            <p className="text-text-secondary text-sm">Cancel a DCA strategy.</p>
           </div>
         </div>
       ),
@@ -154,8 +154,8 @@ Headers:
       content: (
         <div className="space-y-4">
           <p>
-            MoneroDrip menggunakan arsitektur smart contract yang minimal dan auditable. 
-            Kontrak utama hanya menangani approval dan execution routing.
+            MoneroDrip uses a minimal, auditable smart contract architecture. 
+            The main contract only handles approval and execution routing.
           </p>
           <pre className="bg-zinc-900 p-4 rounded-lg overflow-x-auto text-sm font-mono">
 {`// SPDX-License-Identifier: MIT
@@ -203,7 +203,7 @@ interface IMoneroDrip {
           </table>
           <div className="p-4 bg-primary/10 border border-primary/30 rounded-lg">
             <p className="text-sm">
-              Semua kontrak telah diaudit oleh CertiK dan OpenZeppelin. Laporan audit tersedia di GitHub.
+              All contracts have been audited by CertiK and OpenZeppelin. Audit reports are available on GitHub.
             </p>
           </div>
         </div>
@@ -216,25 +216,25 @@ interface IMoneroDrip {
       content: (
         <div className="space-y-4">
           <p>
-            MoneroDrip dirancang dengan prinsip "minimal trust". Anda tidak perlu mempercayai 
-            platform dengan custody token Anda.
+            MoneroDrip is designed with "minimal trust" principles. You don't need to trust 
+            the platform with custody of your tokens.
           </p>
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
               <ChevronRight className="text-primary mt-1 shrink-0" size={16} />
-              <span><strong>Non-custodial:</strong> Token tetap di wallet Anda sampai saat eksekusi.</span>
+              <span><strong>Non-custodial:</strong> Tokens remain in your wallet until execution time.</span>
             </li>
             <li className="flex items-start gap-2">
               <ChevronRight className="text-primary mt-1 shrink-0" size={16} />
-              <span><strong>Limited Approval:</strong> Anda dapat mengatur approval limit yang tepat.</span>
+              <span><strong>Limited Approval:</strong> You can set exact approval limits.</span>
             </li>
             <li className="flex items-start gap-2">
               <ChevronRight className="text-primary mt-1 shrink-0" size={16} />
-              <span><strong>Immutable Contracts:</strong> Tidak ada admin key atau upgrade capability.</span>
+              <span><strong>Immutable Contracts:</strong> No admin key or upgrade capability.</span>
             </li>
             <li className="flex items-start gap-2">
               <ChevronRight className="text-primary mt-1 shrink-0" size={16} />
-              <span><strong>Open Source:</strong> Semua kode tersedia di GitHub untuk review.</span>
+              <span><strong>Open Source:</strong> All code is available on GitHub for review.</span>
             </li>
           </ul>
         </div>
@@ -244,7 +244,7 @@ interface IMoneroDrip {
       title: 'Audits',
       content: (
         <div className="space-y-4">
-          <p>Smart contract MoneroDrip telah diaudit oleh:</p>
+          <p>MoneroDrip smart contracts have been audited by:</p>
           <ul className="space-y-2">
             <li className="p-3 bg-zinc-900 rounded-lg flex items-center justify-between">
               <span>CertiK</span>
@@ -265,24 +265,24 @@ interface IMoneroDrip {
       content: (
         <div className="space-y-6">
           <div>
-            <h4 className="font-medium mb-2">Apa itu DCA?</h4>
+            <h4 className="font-medium mb-2">What is DCA?</h4>
             <p className="text-text-secondary text-sm">
-              Dollar Cost Averaging (DCA) adalah strategi investasi di mana Anda menginvestasikan 
-              jumlah tetap secara berkala, terlepas dari harga aset. Ini mengurangi dampak volatilitas.
+              Dollar Cost Averaging (DCA) is an investment strategy where you invest a fixed 
+              amount periodically, regardless of asset price. This reduces the impact of volatility.
             </p>
           </div>
           <div>
-            <h4 className="font-medium mb-2">Mengapa Monero?</h4>
+            <h4 className="font-medium mb-2">Why Monero?</h4>
             <p className="text-text-secondary text-sm">
-              Monero adalah cryptocurrency paling privat. Tidak seperti Bitcoin, transaksi Monero 
-              sepenuhnya tidak dapat dilacak berkat Ring Signatures, Stealth Addresses, dan RingCT.
+              Monero is the most private cryptocurrency. Unlike Bitcoin, Monero transactions 
+              are completely untraceable thanks to Ring Signatures, Stealth Addresses, and RingCT.
             </p>
           </div>
           <div>
-            <h4 className="font-medium mb-2">Apakah ada minimum?</h4>
+            <h4 className="font-medium mb-2">Is there a minimum?</h4>
             <p className="text-text-secondary text-sm">
-              Ya, setiap aset memiliki minimum amount yang berbeda untuk memastikan swap ekonomis 
-              setelah gas fee.
+              Yes, each asset has a different minimum amount to ensure economical swaps 
+              after gas fees.
             </p>
           </div>
         </div>
@@ -315,7 +315,6 @@ export function DocsPage() {
   return (
     <div className="container mx-auto px-6 py-12">
       <div className="flex flex-col lg:flex-row gap-8">
-        {/* Sidebar */}
         <aside className="lg:w-64 shrink-0">
           <div className="lg:sticky lg:top-24">
             <button
@@ -346,7 +345,6 @@ export function DocsPage() {
           </div>
         </aside>
 
-        {/* Content */}
         <main className="flex-1 min-w-0">
           <h1 className="font-display text-3xl font-bold mb-8">
             {sections.find(s => s.id === activeSection)?.title}
@@ -363,7 +361,6 @@ export function DocsPage() {
         </main>
       </div>
 
-      {/* Search Modal */}
       {searchOpen && (
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 bg-background-page/80 backdrop-blur-sm">
           <div className="w-full max-w-xl bg-background-surface border border-white/10 rounded-xl shadow-2xl">

@@ -19,15 +19,39 @@ const intervals = [
   { value: 1, unit: 'month', label: 'Monthly' },
 ];
 
+// Wallet provider detection
+function detectWallets() {
+  const wallets = [];
+  if (typeof window !== 'undefined') {
+    if ((window as any).ethereum?.isMetaMask) {
+      wallets.push({ id: 'metamask', name: 'MetaMask', icon: 'MM' });
+    }
+    if ((window as any).phantom?.ethereum || (window as any).phantom?.solana) {
+      wallets.push({ id: 'phantom', name: 'Phantom', icon: 'PH' });
+    }
+  }
+  // Always show both options for demo
+  if (!wallets.find(w => w.id === 'metamask')) {
+    wallets.push({ id: 'metamask', name: 'MetaMask', icon: 'MM' });
+  }
+  if (!wallets.find(w => w.id === 'phantom')) {
+    wallets.push({ id: 'phantom', name: 'Phantom', icon: 'PH' });
+  }
+  return wallets;
+}
+
 export function CreatePage() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [assets, setAssets] = useState<SupportedAsset[]>([]);
   const [loading, setLoading] = useState(false);
+  const [connectingWallet, setConnectingWallet] = useState<string | null>(null);
   const [error, setError] = useState('');
+  const [availableWallets] = useState(detectWallets);
 
   const [formData, setFormData] = useState({
     walletAddress: '',
+    walletType: '',
     sourceAsset: '',
     amount: '',
     xmrAddress: '',
@@ -53,16 +77,30 @@ export function CreatePage() {
            /^[48][0-9AB][1-9A-HJ-NP-Za-km-z]{104}$/.test(address);
   }
 
-  function simulateWalletConnect() {
-    setLoading(true);
-    setTimeout(() => {
+  async function connectWallet(walletId: string) {
+    setConnectingWallet(walletId);
+    setError('');
+
+    try {
+      // Simulate wallet connection
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const mockAddresses: Record<string, string> = {
+        metamask: '0x742d...F3a2',
+        phantom: '0x8B3c...A1d9',
+      };
+
       setFormData(prev => ({
         ...prev,
-        walletAddress: '0x742d...F3a2'
+        walletAddress: mockAddresses[walletId] || '0x0000...0000',
+        walletType: walletId,
       }));
-      setLoading(false);
       setCurrentStep(2);
-    }, 1500);
+    } catch (err) {
+      setError('Failed to connect wallet. Please try again.');
+    } finally {
+      setConnectingWallet(null);
+    }
   }
 
   async function handleSubmit() {
@@ -139,17 +177,49 @@ export function CreatePage() {
                   <CheckCircle className="text-status-success" size={24} />
                   <div>
                     <p className="font-medium">Wallet Connected</p>
-                    <p className="font-mono text-sm text-text-secondary">{formData.walletAddress}</p>
+                    <p className="font-mono text-sm text-text-secondary">
+                      {formData.walletType === 'phantom' ? 'Phantom' : 'MetaMask'}: {formData.walletAddress}
+                    </p>
                   </div>
                 </div>
               ) : (
-                <button
-                  onClick={simulateWalletConnect}
-                  disabled={loading}
-                  className="btn-primary w-full flex items-center justify-center gap-2"
-                >
-                  {loading ? 'Connecting...' : 'Connect MetaMask'}
-                </button>
+                <div className="space-y-3">
+                  <p className="text-text-secondary text-sm mb-4">
+                    Choose your wallet provider to connect:
+                  </p>
+                  {availableWallets.map((wallet) => (
+                    <button
+                      key={wallet.id}
+                      onClick={() => connectWallet(wallet.id)}
+                      disabled={connectingWallet !== null}
+                      className={`w-full p-4 rounded-lg border transition-all flex items-center gap-4 ${
+                        connectingWallet === wallet.id
+                          ? 'border-primary bg-primary/10'
+                          : 'border-zinc-800 hover:border-zinc-700'
+                      } disabled:opacity-50`}
+                    >
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
+                        wallet.id === 'metamask' 
+                          ? 'bg-orange-500/20 text-orange-400' 
+                          : 'bg-purple-500/20 text-purple-400'
+                      }`}>
+                        {wallet.icon}
+                      </div>
+                      <div className="text-left flex-1">
+                        <p className="font-medium">{wallet.name}</p>
+                        <p className="text-text-tertiary text-sm">
+                          {wallet.id === 'metamask' ? 'Ethereum & EVM chains' : 'Multi-chain wallet'}
+                        </p>
+                      </div>
+                      {connectingWallet === wallet.id && (
+                        <span className="text-primary text-sm">Connecting...</span>
+                      )}
+                    </button>
+                  ))}
+                  {error && (
+                    <p className="text-status-error text-sm mt-2">{error}</p>
+                  )}
+                </div>
               )}
             </div>
           )}
@@ -157,6 +227,9 @@ export function CreatePage() {
           {/* Step 2: Select Asset */}
           {currentStep === 2 && (
             <div className="py-6 space-y-3">
+              <p className="text-text-secondary text-sm mb-4">
+                Select the token you want to DCA from:
+              </p>
               {assets.map((asset) => (
                 <button
                   key={asset.symbol}
@@ -228,12 +301,18 @@ export function CreatePage() {
                   <AlertCircle size={14} /> Invalid Monero address format
                 </p>
               )}
+              <p className="text-text-tertiary text-xs mt-2">
+                Your XMR will be sent to this address. Double-check it carefully.
+              </p>
             </div>
           )}
 
           {/* Step 5: Interval */}
           {currentStep === 5 && (
             <div className="py-6 space-y-4">
+              <p className="text-text-secondary text-sm mb-2">
+                How often should we execute your DCA?
+              </p>
               <div className="grid grid-cols-2 gap-3">
                 {intervals.map((interval) => (
                   <button

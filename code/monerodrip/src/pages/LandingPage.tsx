@@ -6,54 +6,54 @@ const techFeatures = [
   {
     icon: <Lock className="w-6 h-6" />,
     title: 'Ring Signatures',
-    description: 'Setiap transaksi mencampur output dengan 15+ decoys dari blockchain, menyembunyikan pengirim sebenarnya.',
+    description: 'Each transaction mixes outputs with 15+ decoys from the blockchain, hiding the actual sender.',
   },
   {
     icon: <Eye className="w-6 h-6" />,
     title: 'Stealth Addresses',
-    description: 'One-time destination address untuk setiap transaksi. Tidak ada yang bisa melacak riwayat pembayaran Anda.',
+    description: 'One-time destination address for each transaction. No one can trace your payment history.',
   },
   {
     icon: <EyeOff className="w-6 h-6" />,
     title: 'RingCT',
-    description: 'Ring Confidential Transactions menyembunyikan jumlah transaksi menggunakan Pedersen Commitments.',
+    description: 'Ring Confidential Transactions hide transaction amounts using Pedersen Commitments.',
   },
   {
     icon: <Zap className="w-6 h-6" />,
     title: 'Bulletproofs',
-    description: 'Zero-knowledge proofs yang mengurangi 80%+ ukuran transaksi tanpa trusted setup.',
+    description: 'Zero-knowledge proofs that reduce transaction size by 80%+ without trusted setup.',
   },
 ];
 
 const problems = [
-  { problem: 'Surveillance', solution: 'Transaksi tidak dapat dilacak oleh pihak ketiga mana pun.' },
-  { problem: 'Frozen Funds', solution: 'Tidak ada yang bisa membekukan atau menyita Monero Anda.' },
-  { problem: 'Traceability', solution: 'Riwayat finansial Anda tetap pribadi selamanya.' },
+  { problem: 'Surveillance', solution: 'Transactions cannot be traced by any third party.' },
+  { problem: 'Frozen Funds', solution: 'No one can freeze or seize your Monero.' },
+  { problem: 'Traceability', solution: 'Your financial history remains private forever.' },
 ];
 
 const roadmap = [
-  { quarter: 'Q1 2026', title: 'Multi-chain Support', desc: 'Dukungan untuk Arbitrum, Optimism, Base' },
-  { quarter: 'Q2 2026', title: 'Hardware Wallet', desc: 'Integrasi Ledger dan Trezor' },
-  { quarter: 'Q3 2026', title: 'Fiat On-ramp', desc: 'Beli langsung dengan kartu tanpa KYC' },
-  { quarter: 'Q4 2026', title: 'DAO Governance', desc: 'Komunitas mengelola protokol' },
+  { quarter: 'Q1 2026', title: 'Multi-chain Support', desc: 'Support for Arbitrum, Optimism, Base' },
+  { quarter: 'Q2 2026', title: 'Hardware Wallet', desc: 'Ledger and Trezor integration' },
+  { quarter: 'Q3 2026', title: 'Fiat On-ramp', desc: 'Buy directly with card, no KYC' },
+  { quarter: 'Q4 2026', title: 'DAO Governance', desc: 'Community manages the protocol' },
 ];
 
 const faqs = [
   {
-    q: 'Bagaimana keamanan smart contract?',
-    a: 'Smart contract kami di-audit oleh firma keamanan terkemuka dan bersifat immutable. Anda hanya memberikan approval untuk token spesifik dengan jumlah terbatas.',
+    q: 'How secure are the smart contracts?',
+    a: 'Our smart contracts are audited by leading security firms and are immutable. You only grant approval for specific tokens with limited amounts.',
   },
   {
-    q: 'Berapa fee yang dikenakan?',
-    a: 'Platform fee adalah 0.3% per swap. Gas fee bervariasi tergantung kondisi jaringan Ethereum.',
+    q: 'What are the fees?',
+    a: 'Platform fee is 0.3% per swap. Gas fees vary depending on Ethereum network conditions.',
   },
   {
-    q: 'Apakah ada audit log?',
-    a: 'Semua eksekusi DCA dicatat on-chain dan dapat diverifikasi. Namun, setelah swap ke XMR, transaksi menjadi tidak dapat dilacak.',
+    q: 'Is there an audit log?',
+    a: 'All DCA executions are recorded on-chain and can be verified. However, once swapped to XMR, transactions become untraceable.',
   },
   {
-    q: 'Bagaimana jika saya ingin membatalkan?',
-    a: 'Anda dapat meng-revoke token approval kapan saja dari wallet Anda, atau menggunakan fitur Cancel di Dashboard.',
+    q: 'What if I want to cancel?',
+    a: 'You can revoke token approval anytime from your wallet, or use the Cancel feature in the Dashboard.',
   },
 ];
 
@@ -93,9 +93,9 @@ export function LandingPage() {
           <h2 className="font-display text-3xl font-bold text-center mb-16">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: <Shield className="w-8 h-8 text-primary" />, step: '1', title: 'Approve Allowance', desc: 'Berikan izin smart contract untuk menggunakan token Anda (USDC, WETH, dll).' },
-              { icon: <Timer className="w-8 h-8 text-primary" />, step: '2', title: 'Cron Executes', desc: 'Sistem otomatis menjalankan swap pada interval yang Anda tentukan.' },
-              { icon: <Trash2 className="w-8 h-8 text-primary" />, step: '3', title: 'Auto-delete', desc: 'Setelah selesai, semua data strategi dihapus otomatis dari database.' },
+              { icon: <Shield className="w-8 h-8 text-primary" />, step: '1', title: 'Approve Allowance', desc: 'Grant smart contract permission to use your tokens (USDC, WETH, etc).' },
+              { icon: <Timer className="w-8 h-8 text-primary" />, step: '2', title: 'Cron Executes', desc: 'System automatically executes swaps at your specified interval.' },
+              { icon: <Trash2 className="w-8 h-8 text-primary" />, step: '3', title: 'Auto-delete', desc: 'After completion, all strategy data is automatically deleted from the database.' },
             ].map((item) => (
               <div key={item.step} className="card text-center">
                 <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
@@ -115,7 +115,7 @@ export function LandingPage() {
         <div className="container mx-auto px-6">
           <h2 className="font-display text-3xl font-bold text-center mb-4">Monero Technology</h2>
           <p className="text-text-secondary text-center mb-16 max-w-2xl mx-auto">
-            Teknologi kriptografi mutakhir yang menjadikan Monero mata uang digital paling privat.
+            Cutting-edge cryptographic technology that makes Monero the most private digital currency.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {techFeatures.map((feature) => (
@@ -202,7 +202,7 @@ export function LandingPage() {
         <div className="container mx-auto px-6 text-center">
           <h2 className="font-display text-3xl font-bold mb-4">Support the Project</h2>
           <p className="text-text-secondary mb-8">
-            MoneroDrip adalah proyek open-source. Donasi membantu kami tetap independen.
+            MoneroDrip is an open-source project. Donations help us stay independent.
           </p>
           <div className="card max-w-xl mx-auto">
             <p className="text-text-tertiary text-sm mb-2">XMR Donation Address:</p>

@@ -9,26 +9,26 @@ export function TermsPage() {
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">1. Acceptance of Terms</h2>
             <p className="text-text-secondary">
-              Dengan menggunakan MoneroDrip, Anda menyetujui syarat dan ketentuan ini. 
-              Jika Anda tidak setuju dengan ketentuan apa pun, jangan gunakan layanan ini.
+              By using MoneroDrip, you agree to these terms and conditions. 
+              If you do not agree with any of these terms, do not use this service.
             </p>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">2. Description of Service</h2>
             <p className="text-text-secondary">
-              MoneroDrip adalah platform non-custodial yang memfasilitasi Dollar Cost Averaging 
-              otomatis dari berbagai token ERC-20 ke Monero (XMR). Kami menyediakan antarmuka 
-              untuk berinteraksi dengan smart contracts di blockchain Ethereum.
+              MoneroDrip is a non-custodial platform that facilitates automated Dollar Cost Averaging 
+              from various ERC-20 tokens to Monero (XMR). We provide an interface 
+              to interact with smart contracts on the Ethereum blockchain.
             </p>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">3. Eligibility</h2>
             <p className="text-text-secondary">
-              Anda harus berusia minimal 18 tahun dan memiliki kapasitas hukum untuk menggunakan 
-              layanan ini. Anda bertanggung jawab untuk memastikan bahwa penggunaan layanan ini 
-              legal di yurisdiksi Anda.
+              You must be at least 18 years old and have legal capacity to use 
+              this service. You are responsible for ensuring that use of this service 
+              is legal in your jurisdiction.
             </p>
           </section>
 
@@ -38,62 +38,61 @@ export function TermsPage() {
               <p className="text-status-warning font-medium">Important Warning</p>
             </div>
             <p className="text-text-secondary mb-4">
-              Cryptocurrency dan DeFi melibatkan risiko signifikan termasuk:
+              Cryptocurrency and DeFi involve significant risks including:
             </p>
             <ul className="space-y-2 text-text-secondary">
-              <li>- Volatilitas harga yang ekstrem</li>
-              <li>- Risiko smart contract (bugs, exploits)</li>
-              <li>- Risiko regulasi</li>
-              <li>- Kehilangan akses ke wallet</li>
-              <li>- Slippage dan biaya gas yang tidak terduga</li>
+              <li>- Extreme price volatility</li>
+              <li>- Smart contract risks (bugs, exploits)</li>
+              <li>- Regulatory risks</li>
+              <li>- Loss of wallet access</li>
+              <li>- Unexpected slippage and gas fees</li>
             </ul>
             <p className="text-text-secondary mt-4">
-              Anda mengakui bahwa Anda memahami risiko ini dan bertanggung jawab penuh atas 
-              keputusan investasi Anda.
+              You acknowledge that you understand these risks and are fully responsible for 
+              your investment decisions.
             </p>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">5. Non-Custodial Nature</h2>
             <p className="text-text-secondary">
-              MoneroDrip adalah layanan non-custodial. Kami tidak pernah memiliki custody atau 
-              kontrol atas aset Anda. Token Anda tetap di wallet Anda sampai saat eksekusi swap. 
-              Kami tidak dapat memulihkan token yang hilang atau dicuri.
+              MoneroDrip is a non-custodial service. We never have custody or 
+              control over your assets. Your tokens remain in your wallet until swap execution. 
+              We cannot recover lost or stolen tokens.
             </p>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">6. Fees</h2>
             <p className="text-text-secondary">
-              Platform fee sebesar 0.3% dikenakan per swap yang berhasil. Gas fee untuk transaksi 
-              Ethereum dibayar oleh pengguna. Fee dapat berubah dengan pemberitahuan 30 hari 
-              sebelumnya.
+              A platform fee of 0.3% is charged per successful swap. Ethereum gas fees 
+              are paid by the user. Fees may change with 30 days advance notice.
             </p>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">7. Limitation of Liability</h2>
             <p className="text-text-secondary">
-              MONERODRIP DISEDIAKAN "AS IS" TANPA JAMINAN APA PUN. KAMI TIDAK BERTANGGUNG JAWAB 
-              ATAS KERUGIAN LANGSUNG, TIDAK LANGSUNG, INSIDENTAL, KHUSUS, ATAU KONSEKUENSIAL 
-              YANG TIMBUL DARI PENGGUNAAN LAYANAN INI.
+              MONERODRIP IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES. WE ARE NOT LIABLE 
+              FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES 
+              ARISING FROM USE OF THIS SERVICE.
             </p>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">8. Modifications</h2>
             <p className="text-text-secondary">
-              Kami dapat memodifikasi ketentuan ini kapan saja. Perubahan akan efektif segera 
-              setelah diposting. Penggunaan berkelanjutan layanan merupakan penerimaan 
-              ketentuan yang dimodifikasi.
+              We may modify these terms at any time. Changes will be effective immediately 
+              upon posting. Continued use of the service constitutes acceptance 
+              of the modified terms.
             </p>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-bold mb-4">9. Governing Law</h2>
             <p className="text-text-secondary">
-              Ketentuan ini diatur oleh hukum yang berlaku di yurisdiksi tempat Anda berada, 
-              sejauh tidak bertentangan dengan sifat terdesentralisasi dari layanan ini.
+              These terms are governed by the applicable laws in your jurisdiction, 
+              to the extent not inconsistent with the decentralized nature of this service.
             </p>
           </section>
         </div>
