@@ -5,14 +5,14 @@
         "id": "1",
         "content": "Setup Supabase & Persiapan Infrastruktur",
         "details": "1. Dapatkan kredensial Supabase\n2. Setup database schema\n3. Konfigurasi auth dan storage",
-        "status": "pending",
+        "status": "completed",
         "priority": "high"
       },
       "2": {
         "id": "2",
         "content": "Desain Visual & UI/UX",
-        "details": "1. Buat design specification\n2. Tentukan color palette, typography, dan komponen\n3. Desain responsive untuk mobile dan desktop",
-        "status": "pending",
+        "details": "Landing Page Sections:\n- Hero section dengan tagline privasi\n- How It Works (step-by-step)\n- Teknologi Monero & Kelebihannya\n- Roadmap 2026\n- FAQ\n- Support/Donate\n\nHalaman Tambahan:\n- Documentation (detail & profesional)\n- Privacy Policy\n- Terms of Use",
+        "status": "in_progress",
         "priority": "high"
       },
       "3": {
