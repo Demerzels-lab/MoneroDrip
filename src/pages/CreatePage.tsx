@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Wallet, Coins, DollarSign, MapPin, Timer, CheckCircle, AlertCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Wallet, Coins, DollarSign, MapPin, Timer, CheckCircle, AlertCircle, ArrowLeft, ArrowRight, Lock, Shield } from 'lucide-react';
 import { supabase, SupportedAsset } from '../lib/supabase';
 
+// Step definitions with updated icons
 const steps = [
   { id: 1, title: 'Connect Wallet', icon: Wallet },
   { id: 2, title: 'Select Asset', icon: Coins },
   { id: 3, title: 'Set Amount', icon: DollarSign },
-  { id: 4, title: 'XMR Address', icon: MapPin },
-  { id: 5, title: 'Interval', icon: Timer },
-  { id: 6, title: 'Review', icon: CheckCircle },
+  { id: 4, title: 'Destination', icon: MapPin },
+  { id: 5, title: 'Schedule', icon: Timer },
+  { id: 6, title: 'Approve', icon: Shield },
 ];
 
 const intervals = [
@@ -19,26 +20,11 @@ const intervals = [
   { value: 1, unit: 'month', label: 'Monthly' },
 ];
 
-// Wallet provider detection
-function detectWallets() {
-  const wallets = [];
-  if (typeof window !== 'undefined') {
-    if ((window as any).ethereum?.isMetaMask) {
-      wallets.push({ id: 'metamask', name: 'MetaMask', icon: 'MM' });
-    }
-    if ((window as any).phantom?.ethereum || (window as any).phantom?.solana) {
-      wallets.push({ id: 'phantom', name: 'Phantom', icon: 'PH' });
-    }
-  }
-  // Always show both options for demo
-  if (!wallets.find(w => w.id === 'metamask')) {
-    wallets.push({ id: 'metamask', name: 'MetaMask', icon: 'MM' });
-  }
-  if (!wallets.find(w => w.id === 'phantom')) {
-    wallets.push({ id: 'phantom', name: 'Phantom', icon: 'PH' });
-  }
-  return wallets;
-}
+// Mock Wallets for Simulation
+const mockWallets = [
+  { id: 'metamask', name: 'MetaMask', icon: '🦊', address: '0x71C...9A21' },
+  { id: 'phantom', name: 'Phantom', icon: '👻', address: '0x33A...B1B2' },
+];
 
 export function CreatePage() {
   const navigate = useNavigate();
@@ -47,7 +33,10 @@ export function CreatePage() {
   const [loading, setLoading] = useState(false);
   const [connectingWallet, setConnectingWallet] = useState<string | null>(null);
   const [error, setError] = useState('');
-  const [availableWallets] = useState(detectWallets);
+  
+  // Simulation State
+  const [virtualBalance, setVirtualBalance] = useState(1000); // Everyone starts with $1000 sim money
+  const [isApproved, setIsApproved] = useState(false);
 
   const [formData, setFormData] = useState({
     walletAddress: '',
@@ -69,7 +58,7 @@ export function CreatePage() {
       .from('supported_assets')
       .select('*')
       .eq('is_active', true);
-    if (data) setAssets(data);
+    if (data) setAssets(data || []);
   }
 
   function validateXmrAddress(address: string): boolean {
@@ -77,30 +66,28 @@ export function CreatePage() {
            /^[48][0-9AB][1-9A-HJ-NP-Za-km-z]{104}$/.test(address);
   }
 
-  async function connectWallet(walletId: string) {
-    setConnectingWallet(walletId);
+  async function connectWallet(wallet: typeof mockWallets[0]) {
+    setConnectingWallet(wallet.id);
     setError('');
 
-    try {
-      // Simulate wallet connection
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      const mockAddresses: Record<string, string> = {
-        metamask: '0x742d...F3a2',
-        phantom: '0x8B3c...A1d9',
-      };
+    // Simulate connection delay
+    await new Promise(resolve => setTimeout(resolve, 800));
 
-      setFormData(prev => ({
-        ...prev,
-        walletAddress: mockAddresses[walletId] || '0x0000...0000',
-        walletType: walletId,
-      }));
-      setCurrentStep(2);
-    } catch (err) {
-      setError('Failed to connect wallet. Please try again.');
-    } finally {
-      setConnectingWallet(null);
-    }
+    setFormData(prev => ({
+      ...prev,
+      walletAddress: wallet.address,
+      walletType: wallet.id,
+    }));
+    setConnectingWallet(null);
+    setCurrentStep(2);
+  }
+
+  // Mimics the "Approve" transaction on Ethereum
+  async function handleApprove() {
+    setLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 1500)); // Fake transaction time
+    setIsApproved(true);
+    setLoading(false);
   }
 
   async function handleSubmit() {
@@ -108,6 +95,13 @@ export function CreatePage() {
     setError('');
 
     try {
+      // 1. Check if user has enough "Virtual Balance" (Simulation Logic)
+      const totalCost = parseFloat(formData.amount) * formData.totalOrders;
+      if (totalCost > virtualBalance) {
+        throw new Error(`Insufficient Virtual Balance. You have $${virtualBalance} but need $${totalCost}.`);
+      }
+
+      // 2. Insert Strategy with "Virtual Allowance" set to infinite/authorized
       const { error: insertError } = await supabase.from('dca_strategies').insert({
         wallet_address: formData.walletAddress,
         source_asset: formData.sourceAsset,
@@ -117,13 +111,16 @@ export function CreatePage() {
         total_orders: formData.totalOrders,
         xmr_address: formData.xmrAddress,
         status: 'active',
-        next_execution_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        next_execution_at: new Date(Date.now() + 60 * 1000).toISOString(), // Starts in 1 min for demo
+        // This connects to the SQL column we added earlier:
+        virtual_allowance: 99999999, 
+        virtual_balance_usdc: virtualBalance // Pass the balance to the strategy scope
       });
 
       if (insertError) throw insertError;
       navigate('/dashboard');
-    } catch (err) {
-      setError('Failed to create strategy. Please try again.');
+    } catch (err: any) {
+      setError(err.message || 'Failed to create strategy.');
     } finally {
       setLoading(false);
     }
@@ -139,6 +136,7 @@ export function CreatePage() {
       case 3: return !!formData.amount && parseFloat(formData.amount) >= (selectedAsset?.min_amount || 0);
       case 4: return validateXmrAddress(formData.xmrAddress);
       case 5: return true;
+      case 6: return isApproved; // Block finish if not approved
       default: return true;
     }
   }
@@ -146,268 +144,236 @@ export function CreatePage() {
   return (
     <div className="container mx-auto px-6 py-12">
       <div className="max-w-2xl mx-auto">
-        {/* Progress */}
-        <div className="flex items-center justify-between mb-12">
-          {steps.map((step, i) => (
-            <div key={step.id} className="flex items-center">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                currentStep >= step.id
-                  ? 'bg-gradient-to-r from-primary to-secondary text-background-page'
-                  : 'bg-zinc-800 text-text-tertiary'
-              }`}>
-                <step.icon size={18} />
+        
+        {/* Progress Bar (GhostDrip Style) */}
+        <div className="flex items-center justify-between mb-12 relative">
+          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white/5 -z-10" />
+          {steps.map((step, i) => {
+            const isActive = currentStep >= step.id;
+            const isCurrent = currentStep === step.id;
+            return (
+              <div key={step.id} className="relative group">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border-2 ${
+                  isActive 
+                    ? 'bg-background-page border-primary text-primary shadow-glow-cyan' 
+                    : 'bg-background-surface border-white/10 text-text-tertiary'
+                }`}>
+                  <step.icon size={16} />
+                </div>
+                {isCurrent && (
+                  <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs font-mono text-primary whitespace-nowrap">
+                    {step.title}
+                  </span>
+                )}
               </div>
-              {i < steps.length - 1 && (
-                <div className={`w-8 md:w-16 h-0.5 ${
-                  currentStep > step.id ? 'bg-primary' : 'bg-zinc-800'
-                }`} />
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        <div className="card">
-          <h2 className="font-display text-2xl font-bold mb-2">{steps[currentStep - 1].title}</h2>
+        <div className="card min-h-[400px] flex flex-col">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-display text-2xl font-bold text-white">{steps[currentStep - 1].title}</h2>
+            {currentStep > 1 && (
+               <div className="text-xs font-mono text-status-success bg-status-success/10 px-3 py-1 rounded-full border border-status-success/20">
+                 Virtual Balance: ${virtualBalance} USDC
+               </div>
+            )}
+          </div>
 
-          {/* Step 1: Connect Wallet */}
+          {/* STEP 1: Connect Wallet */}
           {currentStep === 1 && (
-            <div className="py-8">
-              {formData.walletAddress ? (
-                <div className="flex items-center gap-3 p-4 bg-status-success/10 border border-status-success/30 rounded-lg">
-                  <CheckCircle className="text-status-success" size={24} />
-                  <div>
-                    <p className="font-medium">Wallet Connected</p>
-                    <p className="font-mono text-sm text-text-secondary">
-                      {formData.walletType === 'phantom' ? 'Phantom' : 'MetaMask'}: {formData.walletAddress}
-                    </p>
+            <div className="space-y-4">
+              <p className="text-text-secondary text-sm">Select a wallet to simulate the connection:</p>
+              {mockWallets.map((wallet) => (
+                <button
+                  key={wallet.id}
+                  onClick={() => connectWallet(wallet)}
+                  disabled={connectingWallet !== null}
+                  className={`w-full p-4 rounded-xl border transition-all flex items-center gap-4 group ${
+                    connectingWallet === wallet.id
+                      ? 'bg-primary/10 border-primary'
+                      : 'bg-background-surface border-white/5 hover:border-white/20'
+                  }`}
+                >
+                  <div className="text-2xl">{wallet.icon}</div>
+                  <div className="text-left flex-1">
+                    <p className="font-bold text-white">{wallet.name}</p>
+                    <p className="text-xs text-text-tertiary font-mono">{wallet.address}</p>
                   </div>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <p className="text-text-secondary text-sm mb-4">
-                    Choose your wallet provider to connect:
-                  </p>
-                  {availableWallets.map((wallet) => (
-                    <button
-                      key={wallet.id}
-                      onClick={() => connectWallet(wallet.id)}
-                      disabled={connectingWallet !== null}
-                      className={`w-full p-4 rounded-lg border transition-all flex items-center gap-4 ${
-                        connectingWallet === wallet.id
-                          ? 'border-primary bg-primary/10'
-                          : 'border-zinc-800 hover:border-zinc-700'
-                      } disabled:opacity-50`}
-                    >
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
-                        wallet.id === 'metamask' 
-                          ? 'bg-orange-500/20 text-orange-400' 
-                          : 'bg-purple-500/20 text-purple-400'
-                      }`}>
-                        {wallet.icon}
-                      </div>
-                      <div className="text-left flex-1">
-                        <p className="font-medium">{wallet.name}</p>
-                        <p className="text-text-tertiary text-sm">
-                          {wallet.id === 'metamask' ? 'Ethereum & EVM chains' : 'Multi-chain wallet'}
-                        </p>
-                      </div>
-                      {connectingWallet === wallet.id && (
-                        <span className="text-primary text-sm">Connecting...</span>
-                      )}
-                    </button>
-                  ))}
-                  {error && (
-                    <p className="text-status-error text-sm mt-2">{error}</p>
-                  )}
-                </div>
-              )}
+                  {connectingWallet === wallet.id && <span className="text-primary text-sm animate-pulse">Connecting...</span>}
+                </button>
+              ))}
             </div>
           )}
 
-          {/* Step 2: Select Asset */}
+          {/* STEP 2: Select Asset */}
           {currentStep === 2 && (
-            <div className="py-6 space-y-3">
-              <p className="text-text-secondary text-sm mb-4">
-                Select the token you want to DCA from:
-              </p>
+            <div className="space-y-3">
               {assets.map((asset) => (
                 <button
                   key={asset.symbol}
                   onClick={() => setFormData(prev => ({ ...prev, sourceAsset: asset.symbol }))}
-                  className={`w-full p-4 rounded-lg border transition-all flex items-center gap-4 ${
+                  className={`w-full p-4 rounded-xl border transition-all flex items-center gap-4 ${
                     formData.sourceAsset === asset.symbol
-                      ? 'border-primary bg-primary/10'
-                      : 'border-zinc-800 hover:border-zinc-700'
+                      ? 'bg-primary/10 border-primary'
+                      : 'bg-background-surface border-white/5 hover:border-white/20'
                   }`}
                 >
-                  <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center font-mono text-sm">
-                    {asset.symbol.slice(0, 2)}
+                  {/* Fallback icon if no logo */}
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold text-white">
+                    {asset.symbol[0]}
                   </div>
                   <div className="text-left">
-                    <p className="font-medium">{asset.symbol}</p>
-                    <p className="text-text-tertiary text-sm">{asset.name}</p>
+                    <p className="font-bold text-white">{asset.name}</p>
+                    <p className="text-xs text-text-tertiary font-mono">ERC-20</p>
                   </div>
-                  <div className="ml-auto text-text-tertiary text-sm">
-                    Min: {asset.min_amount} {asset.symbol}
+                  <div className="ml-auto text-right">
+                    <p className="text-sm text-text-secondary">Balance: 1,000.00</p>
                   </div>
                 </button>
               ))}
             </div>
           )}
 
-          {/* Step 3: Amount */}
+          {/* STEP 3: Amount */}
           {currentStep === 3 && (
-            <div className="py-6">
-              <label className="block text-text-secondary text-sm mb-2">
-                Amount per order ({formData.sourceAsset})
-              </label>
-              <input
-                type="number"
-                value={formData.amount}
-                onChange={(e) => setFormData(prev => ({ ...prev, amount: e.target.value }))}
-                placeholder="100"
-                className="input text-xl"
-                min={selectedAsset?.min_amount || 0}
-              />
-              {selectedAsset && (
-                <p className="text-text-tertiary text-sm mt-2">
-                  Minimum: {selectedAsset.min_amount} {selectedAsset.symbol}
-                </p>
-              )}
+            <div className="space-y-6">
+              <div>
+                <label className="text-text-secondary text-sm mb-2 block">Amount per order</label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={formData.amount}
+                    onChange={(e) => setFormData(prev => ({ ...prev, amount: e.target.value }))}
+                    placeholder="0.00"
+                    className="input text-3xl font-display py-6 pl-12"
+                  />
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-text-tertiary">$</span>
+                </div>
+                {selectedAsset && (
+                  <p className="text-xs text-text-tertiary mt-2 ml-1">
+                    Min: ${selectedAsset.min_amount} • Max: ${virtualBalance}
+                  </p>
+                )}
+              </div>
             </div>
           )}
 
-          {/* Step 4: XMR Address */}
+          {/* STEP 4: XMR Address */}
           {currentStep === 4 && (
-            <div className="py-6">
-              <label className="block text-text-secondary text-sm mb-2">
-                Monero Destination Address
-              </label>
-              <input
-                type="text"
-                value={formData.xmrAddress}
-                onChange={(e) => setFormData(prev => ({ ...prev, xmrAddress: e.target.value }))}
-                placeholder="4..."
-                className={`input-mono ${
-                  formData.xmrAddress && !validateXmrAddress(formData.xmrAddress)
-                    ? 'border-status-error focus:border-status-error'
-                    : formData.xmrAddress && validateXmrAddress(formData.xmrAddress)
-                    ? 'border-status-success focus:border-status-success'
-                    : ''
-                }`}
-              />
-              {formData.xmrAddress && !validateXmrAddress(formData.xmrAddress) && (
-                <p className="text-status-error text-sm mt-2 flex items-center gap-1">
-                  <AlertCircle size={14} /> Invalid Monero address format
-                </p>
-              )}
-              <p className="text-text-tertiary text-xs mt-2">
-                Your XMR will be sent to this address. Double-check it carefully.
-              </p>
+            <div className="space-y-4">
+               <div className="p-4 bg-background-surface/50 rounded-lg border border-white/5 text-sm text-text-secondary">
+                 <p className="flex items-center gap-2 mb-2 text-primary"><Lock size={14}/> Privacy Note</p>
+                 We do not link this address to your identity. It is only stored until the strategy completes.
+               </div>
+              <div>
+                <label className="text-text-secondary text-sm mb-2 block">Monero Address</label>
+                <textarea
+                  value={formData.xmrAddress}
+                  onChange={(e) => setFormData(prev => ({ ...prev, xmrAddress: e.target.value }))}
+                  placeholder="4..."
+                  className={`input-mono h-24 resize-none ${
+                    formData.xmrAddress && validateXmrAddress(formData.xmrAddress) 
+                      ? 'border-status-success/50 focus:border-status-success' 
+                      : ''
+                  }`}
+                />
+              </div>
             </div>
           )}
 
-          {/* Step 5: Interval */}
+          {/* STEP 5: Interval */}
           {currentStep === 5 && (
-            <div className="py-6 space-y-4">
-              <p className="text-text-secondary text-sm mb-2">
-                How often should we execute your DCA?
-              </p>
+            <div className="space-y-6">
               <div className="grid grid-cols-2 gap-3">
                 {intervals.map((interval) => (
                   <button
                     key={interval.label}
-                    onClick={() => setFormData(prev => ({
-                      ...prev,
-                      intervalValue: interval.value,
-                      intervalUnit: interval.unit,
-                    }))}
-                    className={`p-4 rounded-lg border transition-all ${
+                    onClick={() => setFormData(prev => ({ ...prev, intervalValue: interval.value, intervalUnit: interval.unit }))}
+                    className={`p-4 rounded-xl border transition-all text-sm font-medium ${
                       formData.intervalValue === interval.value && formData.intervalUnit === interval.unit
-                        ? 'border-primary bg-primary/10'
-                        : 'border-zinc-800 hover:border-zinc-700'
+                        ? 'bg-primary/10 border-primary text-white'
+                        : 'bg-background-surface border-white/5 text-text-secondary hover:border-white/20'
                     }`}
                   >
                     {interval.label}
                   </button>
                 ))}
               </div>
-
               <div>
-                <label className="block text-text-secondary text-sm mb-2">
-                  Number of orders
+                <label className="text-text-secondary text-sm mb-2 block flex justify-between">
+                  <span>Number of Executions</span>
+                  <span className="text-primary">{formData.totalOrders}</span>
                 </label>
                 <input
-                  type="number"
+                  type="range"
+                  min="1"
+                  max="52"
                   value={formData.totalOrders}
-                  onChange={(e) => setFormData(prev => ({ ...prev, totalOrders: parseInt(e.target.value) || 1 }))}
-                  className="input"
-                  min={1}
-                  max={52}
+                  onChange={(e) => setFormData(prev => ({ ...prev, totalOrders: parseInt(e.target.value) }))}
+                  className="w-full h-2 bg-background-surface rounded-lg appearance-none cursor-pointer accent-primary"
                 />
               </div>
             </div>
           )}
 
-          {/* Step 6: Review */}
+          {/* STEP 6: Review & Approve (The GhostDrip Logic) */}
           {currentStep === 6 && (
-            <div className="py-6 space-y-4">
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between py-2 border-b border-zinc-800">
-                  <span className="text-text-secondary">Wallet</span>
-                  <span className="font-mono">{formData.walletAddress}</span>
-                </div>
-                <div className="flex justify-between py-2 border-b border-zinc-800">
-                  <span className="text-text-secondary">Source Asset</span>
-                  <span>{formData.sourceAsset}</span>
-                </div>
-                <div className="flex justify-between py-2 border-b border-zinc-800">
-                  <span className="text-text-secondary">Amount per Order</span>
-                  <span>{formData.amount} {formData.sourceAsset}</span>
-                </div>
-                <div className="flex justify-between py-2 border-b border-zinc-800">
-                  <span className="text-text-secondary">Frequency</span>
-                  <span>{selectedInterval?.label}</span>
-                </div>
-                <div className="flex justify-between py-2 border-b border-zinc-800">
-                  <span className="text-text-secondary">Total Orders</span>
-                  <span>{formData.totalOrders}</span>
-                </div>
-                <div className="flex justify-between py-2 border-b border-zinc-800">
-                  <span className="text-text-secondary">Total Investment</span>
-                  <span className="text-primary font-medium">
-                    {(parseFloat(formData.amount) * formData.totalOrders).toFixed(2)} {formData.sourceAsset}
-                  </span>
-                </div>
-                <div className="pt-2">
-                  <span className="text-text-secondary block mb-1">XMR Address</span>
-                  <code className="font-mono text-xs text-primary break-all">{formData.xmrAddress}</code>
-                </div>
+            <div className="space-y-6">
+              <div className="bg-background-surface/50 rounded-xl p-4 border border-white/5 space-y-3 text-sm">
+                 <div className="flex justify-between">
+                    <span className="text-text-secondary">Total Investment</span>
+                    <span className="text-white font-bold">${(parseFloat(formData.amount) * formData.totalOrders).toFixed(2)}</span>
+                 </div>
+                 <div className="flex justify-between">
+                    <span className="text-text-secondary">Frequency</span>
+                    <span className="text-white">{selectedInterval?.label}</span>
+                 </div>
+                 <div className="flex justify-between">
+                    <span className="text-text-secondary">Destination</span>
+                    <span className="font-mono text-xs text-text-tertiary">{formData.xmrAddress.slice(0, 10)}...</span>
+                 </div>
               </div>
 
-              <div className="p-4 bg-primary/10 border border-primary/30 rounded-lg text-sm">
-                <p className="font-medium mb-1">Estimated Fee</p>
-                <p className="text-text-secondary">
-                  Platform fee: 0.3% per swap ({(parseFloat(formData.amount) * 0.003).toFixed(4)} {formData.sourceAsset})
-                </p>
-              </div>
-
-              {error && (
-                <div className="p-4 bg-status-error/10 border border-status-error/30 rounded-lg text-status-error text-sm">
-                  {error}
+              {/* SIMULATION: The Approval Button */}
+              {!isApproved ? (
+                <div className="border border-status-warning/30 bg-status-warning/5 rounded-xl p-4">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="text-status-warning shrink-0 mt-0.5" size={18} />
+                    <div>
+                      <h4 className="font-bold text-status-warning mb-1">Approval Required</h4>
+                      <p className="text-xs text-text-secondary mb-3">
+                        You must approve the smart contract to spend <b>${(parseFloat(formData.amount) * formData.totalOrders).toFixed(2)} USDC</b>.
+                      </p>
+                      <button 
+                        onClick={handleApprove}
+                        disabled={loading}
+                        className="w-full bg-status-warning/20 hover:bg-status-warning/30 text-status-warning font-bold py-2 rounded-lg transition-colors flex items-center justify-center gap-2"
+                      >
+                         {loading ? 'Approving...' : 'Approve Allowance'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="border border-status-success/30 bg-status-success/5 rounded-xl p-4 flex items-center gap-3">
+                   <CheckCircle className="text-status-success" size={20} />
+                   <span className="text-status-success font-medium">Allowance Approved</span>
                 </div>
               )}
+              
+              {error && <p className="text-status-error text-sm text-center">{error}</p>}
             </div>
           )}
 
-          {/* Navigation */}
-          <div className="flex gap-4 mt-6 pt-6 border-t border-zinc-800">
+          {/* Navigation Footer */}
+          <div className="mt-auto pt-8 flex gap-4">
             {currentStep > 1 && (
               <button
                 onClick={() => setCurrentStep(prev => prev - 1)}
-                className="btn-secondary flex items-center gap-2"
+                className="px-6 py-3 rounded-full border border-white/10 text-text-secondary hover:text-white hover:border-white/30 transition-all"
               >
-                <ArrowLeft size={18} /> Back
+                Back
               </button>
             )}
             
@@ -415,17 +381,17 @@ export function CreatePage() {
               <button
                 onClick={() => setCurrentStep(prev => prev + 1)}
                 disabled={!canProceed()}
-                className="btn-primary flex items-center gap-2 ml-auto disabled:opacity-50"
+                className="ml-auto btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Next <ArrowRight size={18} />
+                Continue
               </button>
             ) : (
               <button
                 onClick={handleSubmit}
-                disabled={loading}
-                className="btn-primary flex items-center gap-2 ml-auto"
+                disabled={!isApproved || loading}
+                className="ml-auto btn-primary w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Creating...' : 'Create Strategy'}
+                {loading ? 'Processing...' : 'Start DCA Strategy'}
               </button>
             )}
           </div>
