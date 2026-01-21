@@ -18,32 +18,32 @@ module.exports = {
     extend: {
       colors: {
         background: {
-          page: '#050505',
-          surface: '#0F0F11',
-          hover: '#18181B',
+          page: '#020410', // Deep Navy (GhostDrip Main BG)
+          surface: '#0B101E', // Slightly lighter Navy for cards/sections
+          hover: '#161C2E', // Hover state for surfaces
         },
         primary: {
-          DEFAULT: '#00F0FF',
-          hover: '#4DFAFF',
-          dim: 'rgba(0, 240, 255, 0.1)',
+          DEFAULT: '#FFFFFF', // Primary action/text is often white in this minimal theme
+          hover: '#E4E4E7', // Zinc-200
+          dim: 'rgba(255, 255, 255, 0.1)',
         },
         secondary: {
-          DEFAULT: '#7B61FF',
-          hover: '#927CFF',
+          DEFAULT: '#1F2937', // Dark Grey/Blue for secondary buttons
+          hover: '#374151',
         },
-        monero: '#F26822',
+        monero: '#F26822', // Keeping Monero orange for specific branding
         text: {
           primary: '#FFFFFF',
-          secondary: '#A1A1AA',
-          tertiary: '#52525B',
-          disabled: '#3F3F46',
+          secondary: '#94A3B8', // Slate-400 for subtitles
+          tertiary: '#64748B', // Slate-500
+          disabled: '#475569',
         },
         status: {
           success: '#10B981',
           warning: '#F59E0B',
           error: '#EF4444',
         },
-        border: 'rgba(255, 255, 255, 0.1)',
+        border: '#1E293B', // Slate-800 for subtle borders
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -51,22 +51,21 @@ module.exports = {
         mono: ['JetBrains Mono', 'monospace'],
       },
       borderRadius: {
-        sm: '4px',
-        md: '8px',
-        lg: '12px',
+        sm: '6px', // Slightly softer corners
+        md: '10px',
+        lg: '16px', // GhostDrip cards have distinct rounded corners
+        pill: '9999px',
       },
       boxShadow: {
-        'glow-cyan': '0 0 15px rgba(0, 240, 255, 0.3)',
-        'glow-purple': '0 0 15px rgba(123, 97, 255, 0.3)',
-        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.5)',
+        'card': '0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 6px -1px rgba(0, 0, 0, 0.5)',
+        'float': '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out forwards',
-        'pulse-slow': 'pulse 2s infinite',
       },
       keyframes: {
         fadeIn: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },

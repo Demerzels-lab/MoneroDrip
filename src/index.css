@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,58 +10,76 @@
   }
   
   body {
+    /* Using the new Deep Navy background */
     @apply bg-background-page text-text-primary font-sans antialiased;
   }
   
   ::selection {
-    @apply bg-primary/30;
+    @apply bg-monero/30 text-white;
   }
 }
 
 @layer components {
+  /* GhostDrip Button Style: 
+    Minimalist, Pill-shaped or rounded-md, Solid dark colors with subtle borders 
+  */
   .btn-primary {
-    @apply bg-gradient-to-r from-primary to-secondary px-6 py-3 rounded-md font-medium text-background-page
-           transition-all duration-200 hover:brightness-110 hover:shadow-glow-cyan;
+    @apply bg-secondary/80 border border-white/10 px-6 py-2.5 rounded-full font-medium text-sm text-white
+           transition-all duration-200 hover:bg-secondary hover:border-white/20 hover:shadow-lg;
+  }
+  
+  /* The "Start your DCA" button in the screenshot is actually a dark pill button */
+  .btn-cta {
+    @apply bg-white text-background-page px-6 py-2.5 rounded-full font-bold text-sm
+           transition-all duration-200 hover:bg-zinc-200 hover:scale-105;
   }
   
   .btn-secondary {
-    @apply bg-transparent border border-zinc-700 px-6 py-3 rounded-md font-medium text-zinc-300
-           transition-all duration-200 hover:border-primary hover:text-white;
+    @apply bg-transparent text-text-secondary px-6 py-2.5 rounded-full font-medium text-sm
+           transition-all duration-200 hover:text-white;
   }
   
+  /* GhostDrip Card Style:
+    Deep Navy Surface, very subtle border, no neon glow 
+  */
   .card {
-    @apply bg-background-surface/50 border border-white/10 rounded-lg p-6
-           transition-all duration-200 hover:-translate-y-0.5 hover:border-secondary/50;
+    @apply bg-background-surface/40 backdrop-blur-sm border border-white/5 rounded-2xl p-6
+           transition-all duration-200 hover:bg-background-surface/60 hover:border-white/10;
   }
   
   .input {
-    @apply bg-zinc-900 border border-zinc-800 rounded-md px-4 py-3 text-white w-full
-           focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30
+    @apply bg-background-surface border border-white/10 rounded-lg px-4 py-3 text-white w-full
+           placeholder:text-text-disabled
+           focus:outline-none focus:border-white/20 focus:bg-background-surface/80
            transition-all duration-200;
   }
   
   .input-mono {
     @apply input font-mono text-sm;
   }
-  
-  .glass {
-    @apply bg-background-page/80 backdrop-blur-xl border-b border-white/10;
+
+  /* Navigation Bar Glass Effect */
+  .glass-nav {
+    @apply bg-background-page/80 backdrop-blur-md border-b border-white/5;
   }
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  /* Removed text-gradient. 
+    GhostDrip uses solid white text for headlines. 
+  */
+  .text-glow {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
   }
   
   .animate-stagger > * {
     @apply opacity-0 animate-fade-in;
   }
   
+  /* Stagger delays remain useful */
   .animate-stagger > *:nth-child(1) { animation-delay: 0ms; }
   .animate-stagger > *:nth-child(2) { animation-delay: 100ms; }
   .animate-stagger > *:nth-child(3) { animation-delay: 200ms; }
   .animate-stagger > *:nth-child(4) { animation-delay: 300ms; }
   .animate-stagger > *:nth-child(5) { animation-delay: 400ms; }
-  .animate-stagger > *:nth-child(6) { animation-delay: 500ms; }
 }
