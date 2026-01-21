@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Shield, Timer, Trash2, Lock, Eye, EyeOff, Zap, ChevronDown, ChevronUp } from 'lucide-react';
+import { Shield, Timer, Trash2, Lock, Eye, EyeOff, Zap, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
+// IMPORT THE COMPONENT
+import { NetworkBackground } from '../components/NetworkBackground';
 
+// ... (Keep your existing techFeatures, problems, roadmap, faqs arrays exactly as they are) ...
 const techFeatures = [
   {
     icon: <Lock className="w-6 h-6" />,
@@ -63,9 +66,28 @@ export function LandingPage() {
   return (
     <div className="animate-stagger">
       
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
-        <div className="container mx-auto px-6 text-center z-10 relative">
+      {/* HERO SECTION 
+          1. Added 'relative' so the background can position itself 'absolute' inside this section.
+          2. Added 'overflow-hidden' to prevent particles from creating scrollbars.
+      */}
+      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-background-page">
+        
+        {/* NETWORK BACKGROUND
+            - inset-0: Stretches to fill the section
+            - z-0: Sits behind content
+            - color: White lines
+        */}
+        <NetworkBackground 
+            color="255, 255, 255" 
+            particleCount={120} 
+            className="absolute inset-0 z-0 opacity-40" 
+        />
+
+        {/* CONTENT CONTAINER
+            - z-10: Sits ON TOP of background
+            - relative: Required for z-index to work
+        */}
+        <div className="container mx-auto px-6 text-center relative z-10">
           <div className="max-w-4xl mx-auto">
             <h1 className="font-display text-5xl md:text-7xl font-bold mb-8 leading-tight tracking-tight text-white">
               Privacy-First
@@ -83,9 +105,18 @@ export function LandingPage() {
               <Link to="/docs" className="btn-secondary text-center min-w-[160px]">
                 Read the Docs
               </Link>
+              <a 
+                href="https://trocador.app/en/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="btn-secondary text-center min-w-[200px] flex items-center justify-center gap-2"
+              >
+                Swap executed via Trocador.app
+                <ExternalLink size={16} />
+              </a>
             </div>
 
-            {/* Tech Features Grid - Moved to Hero Footer to match GhostDrip's 4-box layout */}
+            {/* Tech Features Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
               {techFeatures.map((feature) => (
                 <div key={feature.title} className="card group hover:bg-background-surface/60">
@@ -102,7 +133,7 @@ export function LandingPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-24">
+      <section className="py-24 bg-background-page">
         <div className="container mx-auto px-6">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-center mb-4 text-white">How It Works</h2>
           <p className="text-text-secondary text-center mb-16 max-w-xl mx-auto">
@@ -133,7 +164,7 @@ export function LandingPage() {
       </section>
 
       {/* Why Monero */}
-      <section className="py-24">
+      <section className="py-24 bg-background-page">
         <div className="container mx-auto px-6">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-center mb-16 text-white">Why Monero?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -172,7 +203,7 @@ export function LandingPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-24">
+      <section className="py-24 bg-background-page">
         <div className="container mx-auto px-6">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-center mb-16 text-white">FAQ</h2>
           <div className="max-w-2xl mx-auto space-y-4">
@@ -197,7 +228,7 @@ export function LandingPage() {
       </section>
 
       {/* Support */}
-      <section className="py-24 border-t border-white/5">
+      <section className="py-24 border-t border-white/5 bg-background-page">
         <div className="container mx-auto px-6 text-center">
           <h2 className="font-display text-3xl font-bold mb-4 text-white">Support the Project</h2>
           <p className="text-text-secondary mb-8">

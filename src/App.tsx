@@ -7,11 +7,24 @@ import { DashboardPage } from './pages/DashboardPage';
 import { DocsPage } from './pages/DocsPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
+// 1. Import the background component
+import { NetworkBackground } from './components/NetworkBackground';
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col">
+      {/* 2. Add the Global Background here */}
+      {/* 'fixed' makes it cover the whole window and stay there while scrolling */}
+      {/* 'pointer-events-none' ensures clicks pass through to your buttons */}
+      <NetworkBackground 
+        color="255, 255, 255" 
+        particleCount={100} 
+        className="fixed inset-0 z-0 opacity-30 pointer-events-none" 
+      />
+
+      {/* 3. Add 'relative z-10' to your content wrapper */}
+      {/* This ensures your app content sits ON TOP of the canvas */}
+      <div className="min-h-screen flex flex-col relative z-10">
         <Header />
         <main className="flex-1">
           <Routes>
