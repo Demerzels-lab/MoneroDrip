@@ -7,9 +7,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                <span className="text-background-page font-bold text-sm">M</span>
-              </div>
+              <img src="/logo.jpeg" alt="MoneroDrip" className="w-8 h-8 rounded-full object-cover" />
               <span className="font-display font-bold">MoneroDrip</span>
             </div>
             <p className="text-text-tertiary text-sm">

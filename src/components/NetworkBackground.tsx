@@ -1,16 +1,18 @@
 import { useEffect, useRef } from 'react';
 
 interface NetworkBackgroundProps {
-  color?: string; // e.g. "255, 255, 255"
+  color?: string;
   particleCount?: number;
   interactionRadius?: number;
+  connectionRadius?: number;
   className?: string;
 }
 
 export function NetworkBackground({ 
   color = '255, 255, 255', 
-  particleCount = 100, 
-  interactionRadius = 150,
+  particleCount = 200, // Increased from 130 to 200 for high density
+  interactionRadius = 200,
+  connectionRadius = 260, // Increased to 260 to "bind" nodes across larger gaps
   className = ''
 }: NetworkBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -28,9 +30,7 @@ export function NetworkBackground({
     let animationFrameId: number;
     let mouse = { x: -9999, y: -9999 };
 
-    // Initialize dimensions
     const resize = () => {
-      // We use the container's dimensions to ensure it fits the parent section
       canvas.width = container.offsetWidth;
       canvas.height = container.offsetHeight;
       initParticles();
@@ -38,15 +38,17 @@ export function NetworkBackground({
 
     const initParticles = () => {
       particles = [];
-      // Adjust particle count based on screen width (fewer on mobile)
-      const count = window.innerWidth < 768 ? Math.floor(particleCount / 2) : particleCount;
+      const isMobile = window.innerWidth < 768;
+      // On mobile, we reduce count to prevent lag, but keep it relatively dense
+      const count = isMobile ? Math.floor(particleCount / 2) : particleCount;
       
       for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
+          // Low velocity keeps the "mesh" structure stable
+          vx: (Math.random() - 0.5) * 0.3, 
+          vy: (Math.random() - 0.5) * 0.3,
         });
       }
     };
@@ -62,13 +64,13 @@ export function NetworkBackground({
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-        // Draw particle (Dot)
+        // Draw Node: Solid White
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${color}, 0.6)`; // Increased opacity for visibility
+        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${color}, 1.0)`; 
         ctx.fill();
 
-        // Connect to mouse
+        // Connect to Mouse
         const dxMouse = mouse.x - p.x;
         const dyMouse = mouse.y - p.y;
         const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
@@ -77,22 +79,28 @@ export function NetworkBackground({
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(${color}, ${0.4 * (1 - distMouse / interactionRadius)})`;
+            ctx.strokeStyle = `rgba(${color}, ${0.8 * (1 - distMouse / interactionRadius)})`;
             ctx.stroke();
         }
 
-        // Connect to other particles
+        // Connect to Other Particles
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
           const dy = p.y - p2.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 120) {
+          if (distance < connectionRadius) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(${color}, ${0.2 * (1 - distance / 120)})`;
+            
+            // Bright & Thick Lines
+            // Increased max opacity to 0.6 and line width to 1.5
+            const opacity = 0.6 * (1 - distance / connectionRadius);
+            
+            ctx.strokeStyle = `rgba(${color}, ${opacity})`;
+            ctx.lineWidth = 1.5; // Thicker lines make it feel more "binded"
             ctx.stroke();
           }
         }
@@ -112,13 +120,10 @@ export function NetworkBackground({
         mouse.y = -9999;
     }
 
-    // Initialize
     resize();
     draw();
 
-    // Event Listeners
     window.addEventListener('resize', resize);
-    // We attach mouse listeners to the container so it tracks relative to the section
     container.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('mouseleave', handleMouseLeave);
     
@@ -128,16 +133,20 @@ export function NetworkBackground({
       container.removeEventListener('mouseleave', handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [color, particleCount, interactionRadius]);
+  }, [color, particleCount, interactionRadius, connectionRadius]);
 
   return (
     <div 
         ref={containerRef} 
         className={`absolute inset-0 z-0 pointer-events-none ${className}`}
-        // Temporary border for debugging (remove this later if you see the box but no dots)
-        // style={{ border: '1px solid red' }} 
+        aria-hidden="true"
     >
-      <canvas ref={canvasRef} className="block w-full h-full" />
+      <canvas 
+        ref={canvasRef} 
+        className="block w-full h-full"
+        // Ensure no background interference
+        style={{ background: 'transparent' }} 
+      />
     </div>
   );
 }
