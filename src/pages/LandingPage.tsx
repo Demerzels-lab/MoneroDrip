@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Shield, Timer, Trash2, Lock, Eye, EyeOff, Zap, ChevronDown, ChevronUp, ExternalLink, CheckCircle2 } from 'lucide-react';
+import { Shield, Timer, Trash2, Lock, Eye, EyeOff, Zap, ChevronDown, ChevronUp, ExternalLink, CheckCircle2, Twitter, Github } from 'lucide-react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 // IMPORT THE COMPONENT
@@ -107,7 +107,7 @@ export function LandingPage() {
               Automate your dollar-cost averaging into Monero. No accounts, no cookies, no analytics. 
               Just pure financial privacy.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-24">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <Link to="/create" className="btn-cta text-center min-w-[160px]">
                 Start your DCA
               </Link>
@@ -122,6 +122,26 @@ export function LandingPage() {
               >
                 Swap via Trocador.app
                 <ExternalLink size={16} />
+              </a>
+            </div>
+
+            {/* Social Media Links */}
+            <div className="flex justify-center gap-6 mb-16">
+              <a 
+                href="https://x.com/MoneroDrip" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-text-secondary hover:text-white transition-colors"
+              >
+                <Twitter size={24} />
+              </a>
+              <a 
+                href="https://github.com/Demerzels-lab/MoneroDrip" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-text-secondary hover:text-white transition-colors"
+              >
+                <Github size={24} />
               </a>
             </div>
 
@@ -420,6 +440,30 @@ export function LandingPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Contract Address */}
+      {/* <section className="py-24 border-t border-white/5 bg-background-page">
+        <div className="container mx-auto px-6 text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="font-display text-3xl font-bold mb-4 text-white">Contract Address</h2>
+            <p className="text-text-secondary mb-8">
+              The smart contract powering MoneroDrip DCA strategies.
+            </p>
+            <div className="card max-w-xl mx-auto bg-background-page border-dashed border-white/20">
+              <p className="text-text-tertiary text-sm mb-3">Ethereum Contract Address</p>
+              <div className="bg-black/20 rounded p-3 border border-white/5">
+                <code className="font-mono text-text-secondary text-xs sm:text-sm break-all select-all hover:text-white transition-colors cursor-pointer block">
+                  0x1234567890abcdef1234567890abcdef12345678
+                </code>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section> */}
     </div>
   );
 }
