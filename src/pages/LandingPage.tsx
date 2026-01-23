@@ -442,7 +442,7 @@ export function LandingPage() {
       </section>
 
       {/* Contract Address */}
-      {/* <section className="py-24 border-t border-white/5 bg-background-page">
+      <section className="py-24 border-t border-white/5 bg-background-page">
         <div className="container mx-auto px-6 text-center">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -457,13 +457,13 @@ export function LandingPage() {
               <p className="text-text-tertiary text-sm mb-3">Ethereum Contract Address</p>
               <div className="bg-black/20 rounded p-3 border border-white/5">
                 <code className="font-mono text-text-secondary text-xs sm:text-sm break-all select-all hover:text-white transition-colors cursor-pointer block">
-                  0x1234567890abcdef1234567890abcdef12345678
+                  3Q7fJARw3ASVhaixcLuPoRCkZeTRuu14o4S86QJKpump
                 </code>
               </div>
             </div>
           </motion.div>
         </div>
-      </section> */}
+      </section>
     </div>
   );
 }
